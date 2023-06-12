@@ -20,15 +20,15 @@ namespace Homework1_Nataliia
             {
                 if (value.Length > 30)
                 {
-                    Console.WriteLine("first name should be no more than 30 symbols");
+                    throw new ArgumentException("first name should be no more than 30 symbols");
                 }
                 else if (value.Length < 1)
                 {
-                    Console.WriteLine("first name should contains at least 1 symbol");
+                    throw new ArgumentException("first name should contains at least 1 symbol");
                 }
                 else if (!Regex.IsMatch(value, "^[a-zA-Z]"))
                 {
-                    Console.WriteLine("only latin symbols are allowed");
+                    throw new ArgumentException("only latin symbols are allowed");
                 }
                 else
                 {
@@ -44,15 +44,15 @@ namespace Homework1_Nataliia
             {
                 if (value.Length > 30)
                 {
-                    Console.WriteLine("last name should be no more than 30 symbols");
+                    throw new ArgumentException("first name should be no more than 30 symbols");
                 }
                 else if (value.Length < 1)
                 {
-                    Console.WriteLine("last name should contains at least 1 symbol");
+                    throw new ArgumentException("first name should contains at least 1 symbol");
                 }
                 else if (!Regex.IsMatch(value, "^[a-zA-Z]"))
                 {
-                    Console.WriteLine("only latin symbols are allowed");
+                    throw new ArgumentException("only latin symbols are allowed");
                 }
                 else
                 {
@@ -67,7 +67,7 @@ namespace Homework1_Nataliia
             {
                 if (value.Date > DateTime.Now)
                 {
-                    Console.WriteLine("DOB should be not later that today date");
+                    throw new ArgumentException("DOB should be not later that today date");
                 }
                 else
                 {
@@ -82,10 +82,15 @@ namespace Homework1_Nataliia
             {
                 if (!Regex.IsMatch(value, "^[A-Z]{2}[0-9]{10}$"))
                 {
-                    Console.WriteLine("INN must satisfy pattern: < upper_case >< upper_case >< 10digit >");
+                    throw new ArgumentException("INN must satisfy pattern: < upper_case >< upper_case >< 10digit >");
                 }
                 else { _inn = value; }
             }
+        }
+        public static bool ValidateName(string name)
+        {
+            string pattern = @"^[^\d\s]{1,30}$";
+            return Regex.IsMatch(name, pattern);
         }
     }
 }
