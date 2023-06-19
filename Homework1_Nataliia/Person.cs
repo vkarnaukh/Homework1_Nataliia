@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace Homework1_Nataliia
 {
-    public class Person
+    public class Person : IPersonRepository
     {
         private string _fn;
         private string _ln;
         private DateTime _dob;
         private string _inn;
+        public List<Person> People { get; set; }
         public string FN
         {
             get { return _fn; }
@@ -87,10 +88,72 @@ namespace Homework1_Nataliia
                 else { _inn = value; }
             }
         }
-        public static bool ValidateName(string name)
+        public Person SearchByInn(string inn)
         {
-            string pattern = @"^[^\d\s]{1,30}$";
-            return Regex.IsMatch(name, pattern);
+            foreach (Person person in People)
+            {
+                if (person.INN.Contains(inn))
+                {
+                    return person;
+                }
+            }
+            throw new ArgumentException("Person with reqiered INN doesn't exists in the system");
+        }
+        public Person SearchByFNorLN(string name, string lastName)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                foreach (Person person in People)
+                {
+                    if (person.LN.Contains(lastName))
+                    {
+                        return person;
+                    }
+                }
+            }
+            else if (string.IsNullOrEmpty(lastName))
+            {
+                foreach (Person person in People)
+                {
+                    if (person.FN.Contains(name))
+                    {
+                        return person;
+                    }
+                }
+            }
+            throw new ArgumentException("Person with reqiered First or Last name doesn't exists in the system");
+        }
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            Person personToCheck = (Person)obj;
+            return FN == personToCheck.FN && LN == personToCheck.LN && INN == personToCheck.INN;
+        }
+        public override int GetHashCode()
+        {
+            return FN.GetHashCode() + LN.GetHashCode() + DOB.GetHashCode() + INN.GetHashCode();
+        }
+        public void AddPerson(Person personToAdd)
+        {
+            bool exist = false;
+            if (personToAdd != null)
+            {
+                foreach (Person person in People)
+                {
+                    if (person.Equals(personToAdd))
+                    {
+                        exist = true;
+                        throw new ArgumentException("This person exists in the system");
+                    }
+                }
+                if (!exist)
+                {
+                    People.Add(personToAdd);
+                }
+            }
         }
     }
 }
